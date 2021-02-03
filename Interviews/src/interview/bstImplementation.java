@@ -1,5 +1,7 @@
 package interview;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 class Node{
@@ -14,22 +16,22 @@ class Node{
 	
 }
  class bstImplentation{
-
 	 Node root;
-	 void inorder() {
-		 if (root == null)
-			 return;
-		 
-		 Stack<Node> s = new Stack<Node>();
-		 Node curr = root;
-	 
-		 while(curr != null || s.size() >0) {
-			 s.push(curr);
-			 curr = curr.left;
-		 }
-		 curr = s.pop();
-		 curr = curr.right;
-	 }
+	 public List < Integer > inorderTraversal() {
+	        List < Integer > res = new ArrayList < > ();
+	        Stack < Node > stack = new Stack < > ();
+	        Node curr = root;
+	        while (curr != null || !stack.isEmpty()) {
+	            while (curr != null) {
+	                stack.push(curr);
+	                curr = curr.left;
+	            }
+	            curr = stack.pop();
+	            res.add(curr.val);
+	            curr = curr.right;
+	        }
+	        return res;
+	    }
 	
 	 public static void main(String[] args) {
 			
@@ -39,7 +41,7 @@ class Node{
 	        tree.root.right = new Node(3);
 	        tree.root.left.left = new Node(4);
 	        tree.root.left.right = new Node(5);
-	        tree.inorder();
+	        tree.inorderTraversal();
 
 		}
 	
