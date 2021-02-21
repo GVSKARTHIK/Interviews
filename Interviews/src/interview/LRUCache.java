@@ -1,64 +1,48 @@
 package interview;
 import java.util.*;
 
-class LRUCache {
-	 
-    Set<Integer> cache;
-    int capacity;
- 
-    public LRUCache(int capacity)
-    {
-        this.cache = new LinkedHashSet<Integer>(capacity);
+public class LRUCache {
+
+    private int capacity;
+    private LinkedHashMap<Integer,Integer> map;
+
+    public LRUCache(int capacity) {
         this.capacity = capacity;
+        this.map = new LinkedHashMap<>();
     }
- 
-    
-    public boolean get(int key)
-    {
-        if (!cache.contains(key))
-            return false;
-        cache.remove(key);
-        cache.add(key);
-        return true;
-    }
- 
-  
-    public void refer(int key)
-    {        
-        if (get(key) == false)
-           put(key);
-    }
- 
-   
-    public void display()
-    {
-      LinkedList<Integer> list = new LinkedList<>(cache);
-      Iterator<Integer> itr = list.descendingIterator(); 
-       
-      while (itr.hasNext())
-            System.out.print(itr.next() + " ");
-    }
-     
-    public void put(int key)
-    {
-         
-      if (cache.size() == capacity) {
-            int firstKey = cache.iterator().next();
-            cache.remove(firstKey);
+
+    public int get(int key) {
+        Integer value = this.map.get(key);
+        if (value == null) {
+            value = -1;
+        } else {
+            this.set(key, value);
         }
- 
-        cache.add(key);
+        return value;
     }
-     
-    public static void main(String[] args)
-    {
-        LRUCache ca = new LRUCache(4);
-        ca.refer(1);
-        ca.refer(4);
-        ca.refer(3);
-        ca.refer(1);
-        ca.refer(4);
-        ca.refer(2);
-        ca.display();
+
+    public void set(int key, int value) {
+        if (this.map.containsKey(key)) {
+            this.map.remove(key);
+        } else if (this.map.size() == this.capacity) {
+            Iterator<Integer> it = this.map.keySet().iterator();
+            it.next();
+            it.remove();
+        }
+        map.put(key, value);
+    }
+    
+    public static void main(String Args[]) {
+    	LRUCache cache = new LRUCache(4);
+    	cache.set(5, 7);
+    	cache.set(8, 20);
+    	cache.get(5);       // returns 7
+    	cache.set(3, 6);    // evicts key 8
+    	cache.get(8);       // returns -1 (not found)
+    	cache.set(4, 12);   // evicts key 5
+    	cache.get(5);       // returns -1 (not found)
+    	cache.get(3);       // returns 6
+    	cache.get(4);  
+    	
     }
 }
